@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Juice Marketplace</title>
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --accent-color: #8BC34A;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --white-color: #fff;
+            --gray-color: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--primary-color);
+            color: var(--white-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--white-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1505576399279-565b52d4ac71');
+            background-size: cover;
+            background-position: center;
+            color: var(--white-color);
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Section Styles */
+        .section-title {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 10px auto;
+        }
+
+        /* Juices Grid */
+        .juices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .juice-card {
+            background: var(--white-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .juice-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .juice-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .juice-info {
+            padding: 20px;
+        }
+
+        .juice-category {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--white-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .juice-name {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .juice-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .juice-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .juice-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Sell Form */
+        .sell-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--gray-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: var(--white-color);
+            padding: 50px 0 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: var(--white-color);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--white-color);
+            margin: 50px auto;
+            max-width: 800px;
+            width: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Modal Juice Details */
+        .modal-juice {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .modal-juice-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .modal-juice-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-juice-info h2 {
+            font-size: 1.8rem;
+            margin: 10px 0;
+        }
+
+        .modal-juice-description {
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .modal-juice-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        /* Cart Notification */
+        .cart-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: var(--white-color);
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .cart-notification.show {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-juice {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-juice-img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Fresh<span>Juice</span></div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#juices">Juices</a></li>
+                        <li><a href="#sell">Sell</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h2>100% Fresh Natural Juices</h2>
+                <p>Buy or sell fresh, natural juices from local producers</p>
+                <div class="cta-buttons">
+                    <a href="#juices" class="btn">Browse Juices</a>
+                    <a href="#sell" class="btn btn-outline">Sell Yours</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="juices" class="juices-section">
+            <div class="container">
+                <h2 class="section-title">Available Juices</h2>
+                <div class="filters">
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="fruit">Fruit Juices</option>
+                        <option value="vegetable">Vegetable Juices</option>
+                        <option value="mix">Mixed Juices</option>
+                    </select>
+                    <select id="price-filter">
+                        <option value="all">Any Price</option>
+                        <option value="0-5">$0 - $5</option>
+                        <option value="5-10">$5 - $10</option>
+                        <option value="10+">$10+</option>
+                    </select>
+                </div>
+                <div class="juices-grid" id="juices-container">
+                    <!-- Juices will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="sell" class="sell-section">
+            <div class="container">
+                <h2 class="section-title">Sell Your Juice</h2>
+                <form id="juice-form" class="sell-form">
+                    <div class="form-group">
+                        <label for="juice-name">Juice Name</label>
+                        <input type="text" id="juice-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="juice-category">Category</label>
+                        <select id="juice-category" required>
+                            <option value="fruit">Fruit Juice</option>
+                            <option value="vegetable">Vegetable Juice</option>
+                            <option value="mix">Mixed Juice</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="juice-price">Price ($)</label>
+                        <input type="number" id="juice-price" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="juice-description">Description</label>
+                        <textarea id="juice-description" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="juice-image">Image URL</label>
+                        <input type="url" id="juice-image" required>
+                    </div>
+                    <button type="submit" class="btn">List Your Juice</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FreshJuice</h3>
+                    <p>Connecting juice lovers with local producers since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@freshjuice.com</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FreshJuice. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="juice-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body" id="modal-body">
+                <!-- Juice details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JSON Data for Juices
+        const juicesData = {
+            "juices": [
+                {
+                    "id": 1,
+                    "name": "Orange Sunrise",
+                    "category": "fruit",
+                    "price": 4.99,
+                    "description": "Freshly squeezed oranges with a hint of ginger for a zesty kick.",
+                    "image": "https://images.unsplash.com/photo-1612230627411-38f1b8e15cb3"
+                },
+                {
+                    "id": 2,
+                    "name": "Green Detox",
+                    "category": "vegetable",
+                    "price": 5.99,
+                    "description": "Kale, spinach, cucumber, and apple blended for a healthy detox.",
+                    "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd"
+                },
+                {
+                    "id": 3,
+                    "name": "Berry Blast",
+                    "category": "fruit",
+                    "price": 6.49,
+                    "description": "Mixed berries with apple juice for a sweet and tangy flavor.",
+                    "image": "https://images.unsplash.com/photo-1530006260051-0cbc9a3d67ab"
+                },
+                {
+                    "id": 4,
+                    "name": "Carrot Boost",
+                    "category": "vegetable",
+                    "price": 4.49,
+                    "description": "Fresh carrots with orange and lemon for a vitamin-packed drink.",
+                    "image": "https://images.unsplash.com/photo-1603569283847-aa295f0d016a"
+                },
+                {
+                    "id": 5,
+                    "name": "Tropical Mix",
+                    "category": "mix",
+                    "price": 7.99,
+                    "description": "Pineapple, mango, and coconut water for a tropical vacation in a glass.",
+                    "image": "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+                },
+                {
+                    "id": 6,
+                    "name": "Beetroot Power",
+                    "category": "vegetable",
+                    "price": 5.49,
+                    "description": "Beetroot, apple, and lemon for an energizing and colorful juice.",
+                    "image": "https://images.unsplash.com/photo-1603569283847-aa295f0d016a"
+                }
+            ]
+        };
+
+        // DOM Elements
+        const juicesContainer = document.getElementById('juices-container');
+        const categoryFilter = document.getElementById('category-filter');
+        const priceFilter = document.getElementById('price-filter');
+        const juiceForm = document.getElementById('juice-form');
+        const modal = document.getElementById('juice-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const modalBody = document.getElementById('modal-body');
+        const cartCount = document.querySelector('.cart-count');
+
+        // Cart functionality
+        let cart = [];
+
+        // Display juices
+        function displayJuices(juices) {
+            juicesContainer.innerHTML = '';
+            
+            juices.forEach(juice => {
+                const juiceCard = document.createElement('div');
+                juiceCard.className = 'juice-card';
+                juiceCard.innerHTML = `
+                    <img src="${juice.image}" alt="${juice.name}" class="juice-img">
+                    <div class="juice-info">
+                        <span class="juice-category">${getCategoryName(juice.category)}</span>
+                        <h3 class="juice-name">${juice.name}</h3>
+                        <p class="juice-description">${juice.description}</p>
+                        <p class="juice-price">$${juice.price.toFixed(2)}</p>
+                        <div class="juice-actions">
+                            <button class="btn view-btn" data-id="${juice.id}">View Details</button>
+                            <button class="btn add-to-cart-btn" data-id="${juice.id}">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                juicesContainer.appendChild(juiceCard);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', viewJuiceDetails);
+            });
+            
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', addToCart);
+            });
+        }
+
+        // Get category name
+        function getCategoryName(category) {
+            switch(category) {
+                case 'fruit': return 'Fruit Juice';
+                case 'vegetable': return 'Vegetable Juice';
+                case 'mix': return 'Mixed Juice';
+                default: return 'Juice';
+            }
+        }
+
+        // Filter juices
+        function filterJuices() {
+            const category = categoryFilter.value;
+            const priceRange = priceFilter.value;
+            
+            let filteredJuices = juicesData.juices;
+            
+            // Filter by category
+            if (category !== 'all') {
+                filteredJuices = filteredJuices.filter(juice => juice.category === category);
+            }
+            
+            // Filter by price
+            if (priceRange !== 'all') {
+                const [min, max] = priceRange.split('-').map(Number);
+                
+                if (priceRange.endsWith('+')) {
+                    filteredJuices = filteredJuices.filter(juice => juice.price >= 10);
+                } else {
+                    filteredJuices = filteredJuices.filter(juice => juice.price >= min && juice.price <= max);
+                }
+            }
+            
+            displayJuices(filteredJuices);
+        }
+
+        // View juice details
+        function viewJuiceDetails(e) {
+            const juiceId = parseInt(e.target.getAttribute('data-id'));
+            const juice = juicesData.juices.find(j => j.id === juiceId);
+            
+            if (juice) {
+                modalBody.innerHTML = `
+                    <div class="modal-juice">
+                        <img src="${juice.image}" alt="${juice.name}" class="modal-juice-img">
+                        <div class="modal-juice-info">
+                            <span class="juice-category">${getCategoryName(juice.category)}</span>
+                            <h2>${juice.name}</h2>
+                            <p class="modal-juice-description">${juice.description}</p>
+                            <p class="modal-juice-price">Price: $${juice.price.toFixed(2)}</p>
+                            <button class="btn add-to-cart-btn" data-id="${juice.id}">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                
+                modal.style.display = 'block';
+                
+                // Add event listener to modal add to cart button
+                document.querySelector('.modal .add-to-cart-btn').addEventListener('click', addToCart);
+            }
+        }
+
+        // Add to cart
+        function addToCart(e) {
+            const juiceId = parseInt(e.target.getAttribute('data-id'));
+            const juice = juicesData.juices.find(j => j.id === juiceId);
+            
+            if (juice) {
+                const existingItem = cart.find(item => item.id === juice.id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        ...juice,
+                        quantity: 1
+                    });
+                }
+                
+                updateCartCount();
+                showCartNotification(juice.name);
+            }
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Show cart notification
+        function showCartNotification(juiceName) {
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.textContent = `${juiceName} added to cart!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add new juice
+        function addNewJuice(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('juice-name').value;
+            const category = document.getElementById('juice-category').value;
+            const price = parseFloat(document.getElementById('juice-price').value);
+            const description = document.getElementById('juice-description').value;
+            const image = document.getElementById('juice-image').value;
+            
+            const newJuice = {
+                id: juicesData.juices.length + 1,
+                name,
+                category,
+                price,
+                description,
+                image
+            };
+            
+            juicesData.juices.push(newJuice);
+            juiceForm.reset();
+            filterJuices();
+            
+            // Show success message
+            alert('Your juice has been listed successfully!');
+        }
+
+        // Event Listeners
+        categoryFilter.addEventListener('change', filterJuices);
+        priceFilter.addEventListener('change', filterJuices);
+        juiceForm.addEventListener('submit', addNewJuice);
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Initialize
+        displayJuices(juicesData.juices);
+    </script>
+</body>
+</html>
